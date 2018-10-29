@@ -1,0 +1,17 @@
+﻿@inherits Components.ShoppingCartComponent
+@using Samples.Client.Infrastructure.ShoppingCart.Actions
+
+<ul class="list-group list-group-flush">
+    @foreach (var item in State.Items)
+    {
+        <li class="list-group-item">
+            @item.Name (@item.Qty) x $ @item.Price.ToString("0.00")
+        </li>
+    }
+
+    <li class="list-group-item list-group-item-info">Total Amount: <b>$ @State.Amount.ToString("0.00")</b></li>
+</ul>
+
+@functions {
+    string Money(decimal price) => string.Format("$ {0:0.00}", price);
+}

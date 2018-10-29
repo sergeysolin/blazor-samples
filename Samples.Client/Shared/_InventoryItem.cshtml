@@ -1,0 +1,27 @@
+﻿@inherits Components.ShoppingCartComponent
+
+<div class="card">
+    <img class="card-img-top" src="//dummyimage.com/286x180/9c9c9c/fff" alt="@Item.Name">
+    <div class="card-body">
+        <h5 class="card-title">@Item.Name</h5>
+        <p class="card-text">@Item.Description</p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <span class="h2">$ @Item.Price.ToString("0.00")</span>
+            </div>
+            <div class="input-group col-md-6">
+                <input type="text" class="form-control" placeholder="Qty" aria-label="Quantity" aria-describedby="button-addon2" bind="@Qty" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="@(() => AddItem(Item.Id, Qty))">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    int Qty { get; set; } = 1;
+
+    [Parameter] Samples.Shared.InventoryItem Item { get; set; }
+}

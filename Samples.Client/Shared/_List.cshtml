@@ -1,0 +1,17 @@
+﻿@typeparam TItem
+
+<div class="row">
+    @foreach (var item in Items)
+    {
+        <div class="col-md-3">
+            @ItemTemplate(item)
+        </div>
+    }
+</div>
+
+    @functions  {
+
+        [Parameter] RenderFragment<TItem> ItemTemplate { get; set; }
+
+        [Parameter] IEnumerable<TItem> Items { get; set; }
+    }

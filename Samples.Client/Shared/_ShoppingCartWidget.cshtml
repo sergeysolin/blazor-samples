@@ -1,0 +1,5 @@
+﻿@inherits Components.ShoppingCartComponent
+
+<NavLink href="cart">
+    Shopping Cart <span class="badge badge-primary">@State.ItemsCount</span> ($ @State.Amount.ToString("0.00"))
+</NavLink>

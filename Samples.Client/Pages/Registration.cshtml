@@ -1,0 +1,31 @@
+﻿@inherits Components.AuthComponent
+@page  "/registration"
+
+
+<div class="container">
+    <h1>REGISTRATION</h1>
+
+    <form>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input name="email" placeholder="Email" class="form-control" bind="@email" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input name="password" type="password" placeholder="Password" class="form-control" bind="@password" />
+        </div>
+
+        <button type="button" class="btn btn-default" onclick="@Reg">Register</button>
+    </form>
+</div>
+
+@functions {
+    string email { get; set; } = "sergey.solin@gmail.com";
+    string password { get; set; } = "Qwerty123!";
+
+    async Task Reg()
+    {
+        await Register(email, password);
+    }
+}

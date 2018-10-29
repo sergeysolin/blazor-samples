@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Infrastructure\Retails\**" />
+    <Content Remove="Infrastructure\Retails\**" />
+    <EmbeddedResource Remove="Infrastructure\Retails\**" />
+    <None Remove="Infrastructure\Retails\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazor-Redux" Version="0.0.6-alpha001" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="0.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.Browser" Version="0.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="0.6.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Samples.Shared\Samples.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

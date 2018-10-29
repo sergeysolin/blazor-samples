@@ -1,0 +1,13 @@
+﻿@inherits Components.AuthComponent
+
+
+@if (State.IsAuthenticated)
+{
+    <NavLink href="profile">Hello, @State.Name!</NavLink><br />
+    <a href="#" onclick="@SignOut">Sign Out</a>
+}
+else
+{
+    <NavLink href="/login">Login</NavLink>
+    <NavLink href="/registration">Register</NavLink>
+}
