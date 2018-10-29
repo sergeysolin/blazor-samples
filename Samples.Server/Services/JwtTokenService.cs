@@ -12,7 +12,7 @@ namespace Samples.Server.Services
 {
     public interface IJwtTokenService
     {
-        string BuildToken(string email);
+        string BuildToken(string email, string userId);
     }
 
     public class JwtTokenService : IJwtTokenService
@@ -24,12 +24,12 @@ namespace Samples.Server.Services
             _configuration = configuration;
         }
 
-        public string BuildToken(string email)
+        public string BuildToken(string email, string userId)
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Email, email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, userId)                
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

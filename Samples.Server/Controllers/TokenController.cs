@@ -32,31 +32,34 @@ namespace Samples.Server.Controllers
                 return BadRequest();
             }
 
-            var result = await _userManager.CreateAsync(new IdentityUser()
+            var user = new IdentityUser()
             {
                 UserName = model.Email,
-                Email = model.Email
-            }, model.Password);
+                Email = model.Email,
+                Id = Guid.NewGuid().ToString()
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
             {
                 return StatusCode(500);
             }
             
-            return Ok(await BuildResponseAsync(model.Email, null));
+            return Ok(await BuildResponseAsync(model.Email, user.Id));
         }
 
-        async Task<LoginResponse> BuildResponseAsync(string email, string redirectUrl)
+        async Task<LoginResponse> BuildResponseAsync(string email, string id)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
             return new LoginResponse()
             {
-                RedirectUrl = redirectUrl,
+                RedirectUrl = null,
                 Roles = await _userManager.GetRolesAsync(user),
                 Scheme = JwtBearerDefaults.AuthenticationScheme,
                 UserName = user.UserName ?? user.Email,
-                Token = _jwtTokenService.BuildToken(user.Email)
+                Token = _jwtTokenService.BuildToken(user.Email, id)
             };
         }
 
@@ -77,7 +80,7 @@ namespace Samples.Server.Controllers
                 return BadRequest();
             }
 
-            return Ok(await BuildResponseAsync(model.Email, null));
+            return Ok(await BuildResponseAsync(model.Email, user.Id));
         }
     }
 }

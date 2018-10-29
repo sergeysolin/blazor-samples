@@ -23,14 +23,14 @@ namespace Samples.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string email)
+        public async Task<IActionResult> Get()
         {
             if (User != null)
             {
-                if (email != null)
-                {
-                    var user = await _userManager.FindByEmailAsync(email);
+                var user = await _userManager.FindByIdAsync(User.GetUserId());
 
+                if (user != null)
+                {
                     var profile = new UserProfile()
                     {
                         UserName = user.UserName,

@@ -1,3 +1,15 @@
 ﻿@page "/admin"
+@page "/admin/dashboard"
+
+@inject IIdentity Identity
 
 <h1>Admin Page</h1>
+
+@if (Identity.IsAuthenticated)
+{
+    <h2>Hello, Admin!</h2>
+}
+else
+{
+    <h2>You are not authorized to see this page!</h2>
+}

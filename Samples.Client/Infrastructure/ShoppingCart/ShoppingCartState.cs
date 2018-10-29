@@ -8,6 +8,8 @@ namespace Samples.Client.Infrastructure.ShoppingCart
 {
     public class ShoppingCartState
     {
+        public Guid CartId { get; set; }
+
         public IEnumerable<ShoppingCartItem> Items { get; set; } = new List<ShoppingCartItem>();
 
         public decimal Amount { get; set; }

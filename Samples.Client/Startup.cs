@@ -1,10 +1,12 @@
 using BlazorRedux;
 using Microsoft.AspNetCore.Blazor.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Samples.Client.Authorization;
 using Samples.Client.Infrastructure;
 using Samples.Client.Infrastructure.ShoppingCart;
 using Samples.Client.Infrastructure.Users;
 using Samples.Client.Services;
+using System.Security.Principal;
 
 namespace Samples.Client
 {
@@ -12,8 +14,10 @@ namespace Samples.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddReduxStore<ShoppingCartState, IAction>(new ShoppingCartState(), ShoppingCartReducer.Root);
-            services.AddReduxStore<UserState, IAction>(new UserState(), UsersReducer.Root);
+            services
+                .AddStores()
+                .AddIdentity()
+                .AddApiClients();
 
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<IUserService, UserService>();

@@ -30,7 +30,10 @@ namespace Samples.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //TODO: Set claim name type
             services.AddTransient<IJwtTokenService, JwtTokenService>();
+            services.AddTransient<IShoppingCartService, ShoppingCartService>();
 
             services.AddAuthentication(options =>
             {
@@ -47,7 +50,7 @@ namespace Samples.Server
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = _configuration["Jwt:Issuer"],
                     ValidAudience = _configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]))                     
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]))
                 };
             });
 

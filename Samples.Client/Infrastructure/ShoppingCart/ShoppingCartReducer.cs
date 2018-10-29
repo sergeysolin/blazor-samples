@@ -22,6 +22,8 @@ namespace Samples.Client.Infrastructure
                     return AddItem(state, item);
                 case RemoveItemAction item:
                     return RemoveItem(state, item);
+                case InitCartAction cart:
+                    return InitCart(state, cart);
                 default:
                     break;
             }
@@ -51,13 +53,14 @@ namespace Samples.Client.Infrastructure
                 });
             }
 
-            return BuildState(items);
+            return BuildState(state.CartId, items);
         }
 
-        private static ShoppingCartState BuildState(List<ShoppingCartItem> items)
+        private static ShoppingCartState BuildState(Guid cartId, List<ShoppingCartItem> items)
         {
             return new ShoppingCartState()
             {
+                CartId = cartId,
                 Items = items,
                 Amount = items.Sum(c => c.Price * c.Qty),
                 Tax = items.Sum(c => c.Price * c.Qty) * 0.21M
@@ -77,7 +80,12 @@ namespace Samples.Client.Infrastructure
                 }
             }
 
-            return BuildState(items);
+            return BuildState(state.CartId, items);
+        }
+
+        private static ShoppingCartState InitCart(ShoppingCartState state, InitCartAction cart)
+        {
+            return BuildState(cart.CartId, cart.CartItems.ToList());
         }
     }
 }
