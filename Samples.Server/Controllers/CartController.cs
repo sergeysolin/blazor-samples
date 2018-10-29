@@ -34,7 +34,7 @@ namespace Samples.Server.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> Post(Guid id, UserCart cart)
+        public async Task<IActionResult> Put(Guid id,[FromBody] UserCart cart)
         {
             cart.UserId = User.GetUserId();
             return Ok(await _cartService.SaveUserCartAsync(cart));

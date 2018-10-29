@@ -4,13 +4,7 @@ using Samples.Client.Infrastructure;
 using Samples.Client.Infrastructure.ShoppingCart;
 using Samples.Client.Infrastructure.Users;
 using Samples.Client.Services;
-using Samples.Client.Services.Clients;
 using Samples.Shared.ShoppingCart;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Samples.Client
 {
@@ -27,9 +21,14 @@ namespace Samples.Client
         public static IServiceCollection AddApiClients(this IServiceCollection services)
         {
             services.AddSingleton<IApiClient, ApiClient>();
-            services.AddSingleton<IApiClient<UserCart>, ApiClient<UserCart>>((provider) => new ApiClient<UserCart>(provider, "/api/cart"));
+            services.AddApiClient<UserCart>("/api/cart");
 
+            return services;
+        }
 
+        public static IServiceCollection AddApiClient<T>(this IServiceCollection services, string baseUrl)
+        {
+            services.AddSingleton<IApiClient<T>, ApiClient<T>>((provider) => new ApiClient<T>(provider, baseUrl));
 
             return services;
         }

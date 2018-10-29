@@ -9,7 +9,12 @@ namespace Samples.Client.Infrastructure.ShoppingCart.Actions
 {
     public class InitCartAction : IAction
     {
+        public InitCartAction()
+        {
+            CartItems = new List<ShoppingCartItem>();
+        }
+
         public Guid CartId { get; set; }
-        public IEnumerable<ShoppingCartItem> CartItems { get; set; }
+        public List<ShoppingCartItem> CartItems { get; set; }
     }
 }

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Blazor.Services;
 using Samples.Client.Infrastructure.ShoppingCart;
 using Samples.Client.Infrastructure.ShoppingCart.Actions;
 using Samples.Client.Services;
-using Samples.Client.Services.Clients;
 using Samples.Shared;
 using Samples.Shared.ShoppingCart;
 
@@ -54,9 +53,15 @@ namespace Samples.Client.Components
                 await ApiClient.UpdateAsync(id: State.CartId, data: new UserCart()
                 {
                     CartId = State.CartId,
-                    Items = State.Items.ToList()
+                    Items = State?.Items?.ToList()
                 }, _cancellationTokenSource.Token);
             }
+        }
+
+        protected async Task Clear()
+        {
+            Dispatch(new ClearCartAction());
+            await ApiClient.UpdateAsync(State.CartId, new UserCart() { CartId = State.CartId, Items = new System.Collections.Generic.List<ShoppingCartItem>() });
         }
 
         protected override async Task OnInitAsync()

@@ -24,6 +24,8 @@ namespace Samples.Client.Infrastructure
                     return RemoveItem(state, item);
                 case InitCartAction cart:
                     return InitCart(state, cart);
+                case ClearCartAction _:
+                    return ClearCart(state);
                 default:
                     break;
             }
@@ -85,7 +87,12 @@ namespace Samples.Client.Infrastructure
 
         private static ShoppingCartState InitCart(ShoppingCartState state, InitCartAction cart)
         {
-            return BuildState(cart.CartId, cart.CartItems.ToList());
+            return BuildState(cart.CartId, cart.CartItems ?? new List<ShoppingCartItem>());
+        }
+
+        private static ShoppingCartState ClearCart(ShoppingCartState state)
+        {
+            return BuildState(state.CartId, new List<ShoppingCartItem>());
         }
     }
 }

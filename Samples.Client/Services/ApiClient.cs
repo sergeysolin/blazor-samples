@@ -38,20 +38,16 @@ namespace Samples.Client.Services
 
     public class ApiClient<T> : IApiClient<T>
     {
-        protected readonly Uri _baseUri;
+        private readonly string _baseUrl;
         protected readonly HttpClient _httpClient;
 
         public ApiClient(IServiceProvider serviceProvider, string baseUrl)
         {
             _httpClient = serviceProvider.GetRequiredService<HttpClient>();
-
-            Console.WriteLine($"HTTP CLIENT IS NULL: {_httpClient == null}");
-            Console.WriteLine($"Base URL: {baseUrl}");
-
-            _baseUri = new Uri(baseUrl);
+            _baseUrl = baseUrl;
         }
 
-        protected async Task<Response> SendAsync(Uri uri, HttpMethod method, object content, HttpCompletionOption httpCompletionOption, CancellationToken cancellationToken)
+        protected async Task<Response> SendAsync(string url, HttpMethod method, object content, HttpCompletionOption httpCompletionOption, CancellationToken cancellationToken)
         {
             HttpResponseMessage response = null;
 
@@ -59,13 +55,13 @@ namespace Samples.Client.Services
             {
                 if(method == HttpMethod.Get)
                 {
-                    response = await _httpClient.GetAsync(uri, httpCompletionOption, cancellationToken);
+                    response = await _httpClient.GetAsync(url, httpCompletionOption, cancellationToken);
                 }
                 else
                 {
                     var requestJson = content == null ? string.Empty : Json.Serialize(content);
 
-                    response = await _httpClient.SendAsync(new HttpRequestMessage(method, uri)
+                    response = await _httpClient.SendAsync(new HttpRequestMessage(method, url)
                     {
                         Content = new StringContent(requestJson, Encoding.UTF8, "application/json")
                     }, httpCompletionOption, cancellationToken);
@@ -88,7 +84,6 @@ namespace Samples.Client.Services
             }
             catch(Exception e)
             {
-                //TODO: Logging
                 Console.WriteLine($"ERROR: {e.Message}");
 
                 if(response != null)
@@ -103,7 +98,7 @@ namespace Samples.Client.Services
         #region Get
 
         public Task<Response> GetAsync(CancellationToken cancellationToken) =>
-            SendAsync(_baseUri, HttpMethod.Get, null, HttpCompletionOption.ResponseContentRead, cancellationToken);
+            SendAsync(_baseUrl, HttpMethod.Get, null, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
         public Task<Response> GetAsync() =>
             GetAsync(CancellationToken.None);
@@ -113,7 +108,7 @@ namespace Samples.Client.Services
         #region Get By Id
 
         public Task<Response> GetByIdAsync<TKey>(TKey id, CancellationToken cancellationToken) =>
-            SendAsync(new Uri(_baseUri, id.ToString()), HttpMethod.Get, null, HttpCompletionOption.ResponseContentRead, cancellationToken);
+            SendAsync($"{_baseUrl}/{id}", HttpMethod.Get, null, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
         public Task<Response> GetByIdAsync<TKey>(TKey id) =>
             GetByIdAsync(id, CancellationToken.None);
@@ -123,7 +118,7 @@ namespace Samples.Client.Services
         #region Create
 
         public Task<Response> CreateAsync(T data, CancellationToken cancellationToken) =>
-            SendAsync(_baseUri, HttpMethod.Post, data, HttpCompletionOption.ResponseContentRead, cancellationToken);
+            SendAsync(_baseUrl, HttpMethod.Post, data, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
         public Task<Response> CreateAsync(T data) =>
             CreateAsync(data, CancellationToken.None);
@@ -133,7 +128,7 @@ namespace Samples.Client.Services
         #region Update
 
         public Task<Response> UpdateAsync<TKey>(TKey id, T data, CancellationToken cancellationToken) =>
-            SendAsync(new Uri(_baseUri, id.ToString()), HttpMethod.Put, data, HttpCompletionOption.ResponseContentRead, cancellationToken);
+            SendAsync($"{_baseUrl}/{id}", HttpMethod.Put, data, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
         public Task<Response> UpdateAsync<TKey>(TKey id, T data) =>
             UpdateAsync(id, data, CancellationToken.None);
@@ -143,7 +138,7 @@ namespace Samples.Client.Services
         #region Delete
 
         public Task<Response> DeleteAsync<TKey>(TKey id, CancellationToken cancellationToken) =>
-            SendAsync(new Uri(_baseUri, id.ToString()), HttpMethod.Delete, null, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            SendAsync($"{_baseUrl}/{id}", HttpMethod.Delete, null, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
         public Task<Response> DeleteAsync<TKey>(TKey id) =>
             DeleteAsync(id, CancellationToken.None);

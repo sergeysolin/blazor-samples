@@ -1,4 +1,5 @@
-﻿using Samples.Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Samples.Server.Data;
 using Samples.Shared.ShoppingCart;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,9 @@ namespace Samples.Server.Services
 
         public async Task<UserCart> GetUserCartAsync(string userId)
         {
-            var cart = await _dbContext.ShoppingCarts.ToAsyncEnumerable().FirstOrDefault(c => c.UserId == userId);
+            var cart = await _dbContext.ShoppingCarts
+                .Include(c => c.Items)
+                .ToAsyncEnumerable().FirstOrDefault(c => c.UserId == userId);
 
             if(cart == null)
             {
@@ -49,10 +52,10 @@ namespace Samples.Server.Services
             }
             else
             {
-                _dbContext.Update(cart);
+                existing.Items = cart.Items;
+                existing.Expiration = cart.Expiration;
+                await _dbContext.SaveChangesAsync();
             }
-
-            await _dbContext.SaveChangesAsync();
 
             return await GetUserCartAsync(cart.UserId);
         }
