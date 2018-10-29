@@ -27,7 +27,7 @@ namespace Samples.Server.Controllers
         {
             if (User != null)
             {
-                var user = await _userManager.FindByIdAsync(User.GetUserId());
+                var user = await _userManager.FindByIdAsync(User.GetUserId().ToString());
 
                 if (user != null)
                 {

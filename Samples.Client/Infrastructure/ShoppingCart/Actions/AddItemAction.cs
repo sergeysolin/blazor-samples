@@ -8,7 +8,7 @@ namespace Samples.Client.Infrastructure.ShoppingCart.Actions
 {
     public class AddItemAction : IAction
     {
-        public int ItemId { get; set; }
+        public Guid ItemId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }

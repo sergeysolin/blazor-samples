@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="0.6.0" />
@@ -13,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Samples.BusinessLogic\Samples.BusinessLogic.csproj" />
     <ProjectReference Include="..\Samples.Client\Samples.Client.csproj" />
     <ProjectReference Include="..\Samples.Shared\Samples.Shared.csproj" />
   </ItemGroup>

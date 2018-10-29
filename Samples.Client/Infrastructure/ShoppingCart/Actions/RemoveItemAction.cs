@@ -8,7 +8,7 @@ namespace Samples.Client.Infrastructure.ShoppingCart.Actions
 {
     public class RemoveItemAction : IAction
     {
-        public int ItemId { get; set; }
+        public Guid ItemId { get; set; }
         public int Qty { get; set; }
     }
 }

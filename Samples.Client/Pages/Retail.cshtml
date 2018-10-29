@@ -1,9 +1,1 @@
 ﻿@page "/retail"
-
-@inject Services.IInventoryItemService Service
-
-<_List Items="@Service.GetItems()" TItem="Samples.Shared.InventoryItem">
-    <ItemTemplate>
-        <_InventoryItem Item="context" />
-    </ItemTemplate>
-</_List>

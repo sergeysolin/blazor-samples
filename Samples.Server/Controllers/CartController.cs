@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Samples.BusinessLogic.Data;
 using Samples.Server.Services;
 using Samples.Shared;
 using Samples.Shared.ShoppingCart;
@@ -13,31 +15,35 @@ namespace Samples.Server.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-        private readonly IShoppingCartService _cartService;
+        private readonly ApplicationDbContext _dbContext;
 
-        public CartController(IShoppingCartService cartService)
+        public CartController(ApplicationDbContext dbContext)
         {
-            _cartService = cartService;
+            _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Get()
-        {
-            return Ok(await _cartService.GetUserCartAsync(User.GetUserId()));
-        }
+        //public async Task<IActionResult> Get()
+        //{
+        //    var cart = await _dbContext.ShoppingCarts
+        //        .Include(s => s.Items)
+        //        .FirstOrDefaultAsync(c => c.Id == User.GetUserId());
 
-        [HttpPost]
-        public async Task<IActionResult> Post(UserCart cart)
-        {
-            cart.UserId = User.GetUserId();
-            return Ok(await _cartService.SaveUserCartAsync(cart));
-        }
+        //    return Ok(await _cartService.GetUserCartAsync(User.GetUserId()));
+        //}
 
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> Put(Guid id,[FromBody] UserCart cart)
-        {
-            cart.UserId = User.GetUserId();
-            return Ok(await _cartService.SaveUserCartAsync(cart));
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Post(UserCart cart)
+        //{
+        //    cart.UserId = User.GetUserId();
+        //    return Ok(await _cartService.SaveUserCartAsync(cart));
+        //}
+
+        //[HttpPut]
+        //[Route("{id}")]
+        //public async Task<IActionResult> Put(Guid id,[FromBody] UserCart cart)
+        //{
+        //    cart.UserId = User.GetUserId();
+        //    return Ok(await _cartService.SaveUserCartAsync(cart));
+        //}
     }
 }

@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Samples.Shared
+namespace Samples.BusinessLogic.Data
 {
-    public class ShoppingCartItem
+    public class Inventory
     {
-        public Guid CartItemId { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
+        public string SKU { get; set; }
+
         public string Name { get; set; }
+
         public string Description { get; set; }
-        public decimal Price { get; set; }
-        public int Qty { get; set; }
     }
 }

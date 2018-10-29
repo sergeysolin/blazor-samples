@@ -21,7 +21,7 @@ namespace Samples.Client
 
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IInventoryItemService, InventoryItemService>();
+            //services.AddSingleton<IInventoryItemService, InventoryItemService>();
         }
 
         public void Configure(IBlazorApplicationBuilder app)

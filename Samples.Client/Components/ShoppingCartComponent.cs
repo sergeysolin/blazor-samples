@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,9 +19,6 @@ namespace Samples.Client.Components
         protected readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         [Inject]
-        public IInventoryItemService InventoryItemService { get; set; }
-
-        [Inject]
         public IIdentity Identity { get; set; }
 
         [Inject]
@@ -33,9 +31,9 @@ namespace Samples.Client.Components
             Dispatch(new RemoveItemAction() { ItemId = item.Id, Qty = qty });
         }
 
-        protected async Task AddItem(int itemId, int qty)
+        protected async Task AddItem(Guid itemId, int qty)
         {
-            var item = InventoryItemService.GetItem(itemId);
+            var item = new InventoryItem();
 
             if (item != null)
             {

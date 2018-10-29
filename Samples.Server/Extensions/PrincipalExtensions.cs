@@ -9,6 +9,16 @@ namespace Samples.Server
 {
     public static class PrincipalExtensions
     {
-        public static string GetUserId(this ClaimsPrincipal user) => user?.Claims?.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti)?.Value;
+        public static Guid? GetUserId(this ClaimsPrincipal user)
+        {
+            var id = user?.Claims?.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti)?.Value;
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                return new Guid(id);
+            }
+
+            return default;
+        }
     }
 }

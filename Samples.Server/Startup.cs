@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Blazor.Server;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
-using Samples.Server.Data;
+using Samples.BusinessLogic.Data;
+using Samples.Server.Mappings;
 using Samples.Server.Services;
 using System.Linq;
 using System.Net.Mime;
@@ -33,7 +35,7 @@ namespace Samples.Server
 
             //TODO: Set claim name type
             services.AddTransient<IJwtTokenService, JwtTokenService>();
-            services.AddTransient<IShoppingCartService, ShoppingCartService>();
+            //services.AddTransient<IShoppingCartService, ShoppingCartService>();
 
             services.AddAuthentication(options =>
             {
@@ -72,6 +74,8 @@ namespace Samples.Server
                     WasmMediaTypeNames.Application.Wasm,
                 });
             });
+
+            services.AddAutoMapper(config => config.AddProfile(new MappingProfile()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

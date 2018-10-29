@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Samples.Server.Data;
+using Samples.BusinessLogic.Data;
 
-namespace Samples.Server.Migrations
+namespace Samples.BusinessLogic.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181029121637_ShoppingCart")]
-    partial class ShoppingCart
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,42 +184,106 @@ namespace Samples.Server.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Samples.Shared.ShoppingCart.UserCart", b =>
+            modelBuilder.Entity("Samples.BusinessLogic.Data.Customer", b =>
                 {
-                    b.Property<Guid>("CartId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Expiration");
 
                     b.Property<string>("UserId");
 
-                    b.HasKey("CartId");
+                    b.HasKey("Id");
 
-                    b.ToTable("ShoppingCarts");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Samples.Shared.ShoppingCartItem", b =>
+            modelBuilder.Entity("Samples.BusinessLogic.Data.Inventory", b =>
                 {
-                    b.Property<Guid>("CartItemId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("Id");
-
                     b.Property<string>("Name");
+
+                    b.Property<string>("SKU");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Inventories");
+                });
+
+            modelBuilder.Entity("Samples.BusinessLogic.Data.InventoryItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("InventoryId");
 
                     b.Property<decimal>("Price");
 
                     b.Property<int>("Qty");
 
-                    b.Property<Guid?>("UserCartCartId");
+                    b.Property<Guid?>("StockRoomId");
 
-                    b.HasKey("CartItemId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("UserCartCartId");
+                    b.HasIndex("InventoryId");
 
-                    b.ToTable("CartItems");
+                    b.HasIndex("StockRoomId");
+
+                    b.ToTable("InventoryItems");
+                });
+
+            modelBuilder.Entity("Samples.BusinessLogic.Data.ShoppingCart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("CustomerId");
+
+                    b.Property<DateTime>("ExpirationDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("Samples.BusinessLogic.Data.ShoppingCartItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("InventoryItemId");
+
+                    b.Property<int>("Qty");
+
+                    b.Property<Guid?>("ShoppingCartId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventoryItemId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("ShoppingCartItems");
+                });
+
+            modelBuilder.Entity("Samples.BusinessLogic.Data.StockRoom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StockRooms");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -269,11 +331,40 @@ namespace Samples.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Samples.Shared.ShoppingCartItem", b =>
+            modelBuilder.Entity("Samples.BusinessLogic.Data.Customer", b =>
                 {
-                    b.HasOne("Samples.Shared.ShoppingCart.UserCart")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Samples.BusinessLogic.Data.InventoryItem", b =>
+                {
+                    b.HasOne("Samples.BusinessLogic.Data.Inventory", "Inventory")
+                        .WithMany()
+                        .HasForeignKey("InventoryId");
+
+                    b.HasOne("Samples.BusinessLogic.Data.StockRoom", "StockRoom")
+                        .WithMany()
+                        .HasForeignKey("StockRoomId");
+                });
+
+            modelBuilder.Entity("Samples.BusinessLogic.Data.ShoppingCart", b =>
+                {
+                    b.HasOne("Samples.BusinessLogic.Data.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+                });
+
+            modelBuilder.Entity("Samples.BusinessLogic.Data.ShoppingCartItem", b =>
+                {
+                    b.HasOne("Samples.BusinessLogic.Data.InventoryItem", "InventoryItem")
+                        .WithMany()
+                        .HasForeignKey("InventoryItemId");
+
+                    b.HasOne("Samples.BusinessLogic.Data.ShoppingCart")
                         .WithMany("Items")
-                        .HasForeignKey("UserCartCartId");
+                        .HasForeignKey("ShoppingCartId");
                 });
 #pragma warning restore 612, 618
         }
